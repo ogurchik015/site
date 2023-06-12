@@ -1,0 +1,42 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <title>Simple Barcode Scanner</title>
+        <script>
+            var barcode = '';
+            var interval;
+            document.addEventListener('keydown', function(evt) {
+                if (interval)
+                    clearInterval(interval);
+                if (evt.code == 'Enter') {
+                    if (barcode)
+                        handleBarcode(barcode);
+                    barcode = '';
+                    return;
+                }
+                if (evt.key != 'Shift')
+                    barcode += evt.key;
+                interval = setInterval(() => barcode = '', 20);
+            });
+
+            function handleBarcode(scanned_barcode) {
+                document.querySelector('#last-barcode').innerHTML = scanned_barcode;
+                console.log(scanned_barcode);
+                let xhr = new XMLHttpRequest();
+
+                // 2. Настраиваем его: GET-запрос по URL /article/.../load
+                xhr.open('GET', 'http://nodejs.ogurchik015.repl.co/app');
+
+                // 3. Отсылаем запрос
+                xhr.send();
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Отсканируйте ячейку, а затем грузоместо</h1>
+        <strong>Last scanned barcode: </strong>
+        <div id="last-barcode"></div>
+    
+</body>
+</html>
